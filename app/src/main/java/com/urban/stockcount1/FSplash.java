@@ -6,6 +6,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.animation.Animator;
@@ -23,6 +24,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.ResultReceiver;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
@@ -77,11 +79,14 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.PermissionRequestErrorListener;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 import com.urban.stockcount1.CustomClass.Cache;
+import com.urban.stockcount1.CustomClass.DownloadService;
+import com.urban.stockcount1.CustomClass.UpdateHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -91,7 +96,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
-public class FSplash extends AppCompatActivity {
+public class FSplash extends AppCompatActivity implements UpdateHelper.onUpdateCheckListener {
     //Var
     ProgressDialog progressDialog;
     DatabaseHelper module;
@@ -103,12 +108,14 @@ public class FSplash extends AppCompatActivity {
     SQLiteDatabase db;
     private FirebaseDatabase database;
     private DatabaseReference myRef,dbRef;
-    private String device_id,
+    private String device_id, ipfirebase,
             idlogin,userlogin,passlogin,aliaslogin
             ,deviceidlogin,devicelogin,emaillogin,kodecabang;
     private Boolean needlogin=true, load_done=false;
     private StorageReference storageRef;
     private Intent permissionIntent;
+    private ProgressDialog mProgressDialog;
+    private int count=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -198,42 +205,17 @@ public class FSplash extends AppCompatActivity {
 //                }
                 if(task.isSuccessful()) {
                     db.execSQL("DELETE FROM tbl_api");
-                    Calendar calendar = Calendar.getInstance();
-                    calendar.add(Calendar.DAY_OF_YEAR, -7);
-                    Date newDate = calendar.getTime();
-                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-                    String date = dateFormat.format(newDate);
-                    Query qry1 = dbRef.orderByChild("date").startAt("2000-01-01").endAt(date);
-                    qry1.addListenerForSingleValueEvent(new ValueEventListener() {
+                    spls_status.setText("Checking Update...");
+                    ipfirebase=String.valueOf(task.getResult().getValue());
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
                         @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.exists()) {
-                                load_done=false;
-                                String ipnya = String.valueOf(task.getResult().getValue());
-                                for (DataSnapshot snap: snapshot.getChildren()) {
-                                    load_done=false;
-                                    String filenya = snap.child("name").getValue(String.class);
-                                    StorageReference rref = storageRef.child(filenya);
-                                    rref.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            snap.getRef().removeValue();
-                                            load_done=true;
-                                        }
-                                    });
-                                }
-                                continueafterdel(ipnya);
-                            } else {
-                                load_done=true;
-                                String ipnya = String.valueOf(task.getResult().getValue());
-                                continueafterdel(ipnya);
-                            }
+                        public void run() {
+                            UpdateHelper.with(FSplash.this)
+                                    .onUpdateCheck(FSplash.this)
+                                    .check();
                         }
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
+                    }, 1000);
                 }
             }
         })
@@ -898,5 +880,175 @@ public class FSplash extends AppCompatActivity {
 //        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
 //                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(stringRequest);
+    }
+
+    @Override
+    public void onUpdateCheckListener(String url) {
+        if (url.trim().contains("true")) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
+            builder.setTitle("Update avaible");
+            builder.setCancelable(false);
+            builder.setMessage("Versi terbaru tersedia, mohon update untuk melanjutkan...");
+            builder.setPositiveButton("Update", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    myRef.child("url_stock_app").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DataSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                if (Cache.getInstance().isUpdate()) {
+                                    Cache.getInstance().replace("UPDATE", "true");
+                                } else {
+                                    Cache.getInstance().setDataList("UPDATE", "true");
+                                }
+                                String ur = String.valueOf(task.getResult().getValue());
+                                if (ur.trim().length() > 0) {
+                                    mProgressDialog = new ProgressDialog(FSplash.this);
+                                    mProgressDialog.setMessage("Downloading update");
+                                    mProgressDialog.setIndeterminate(true);
+                                    mProgressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                                    mProgressDialog.setCancelable(false);
+                                    mProgressDialog.show();
+                                    Intent intent = new Intent(FSplash.this, DownloadService.class);
+                                    intent.putExtra("url", ur);
+                                    intent.putExtra("receiver", new DownloadReceiver(new Handler()));
+                                    startService(intent);
+                                } else {
+                                    AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
+                                    builder.setTitle("Application error");
+                                    builder.setCancelable(false);
+                                    builder.setMessage("Tidak ada URL update, Mohon kontak developer...");
+                                    builder.setPositiveButton("Tutup aplikasi", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
+                                            System.exit(0);
+                                        }
+                                    });
+                                    builder.show();
+                                }
+                            }
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
+                            builder.setTitle("Application error");
+                            builder.setCancelable(false);
+                            builder.setMessage("Gagal mengambil URL Update, Mohon kontak developer...");
+                            builder.setPositiveButton("Tutup aplikasi", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    dialog.cancel();
+                                    System.exit(0);
+                                }
+                            });
+                            builder.show();
+                        }
+                    });
+
+                }
+            });
+            builder.show();
+        } else {
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DAY_OF_YEAR, -7);
+            Date newDate = calendar.getTime();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            String date = dateFormat.format(newDate);
+            Query qry1 = dbRef.orderByChild("date").startAt("2000-01-01").endAt(date);
+            qry1.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()) {
+                        load_done=false;
+                        for (DataSnapshot snap: snapshot.getChildren()) {
+                            load_done=false;
+                            String filenya = snap.child("name").getValue(String.class);
+                            StorageReference rref = storageRef.child(filenya);
+                            rref.delete().addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    snap.getRef().removeValue();
+                                    load_done=true;
+                                }
+                            });
+                        }
+                        continueafterdel(ipfirebase);
+                    } else {
+                        load_done=true;
+                        continueafterdel(ipfirebase);
+                    }
+                }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+
+    }
+
+    private class DownloadReceiver extends ResultReceiver {
+
+        public DownloadReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+            super.onReceiveResult(resultCode, resultData);
+            if (resultCode == DownloadService.UPDATE_PROGRESS) {
+                mProgressDialog.setIndeterminate(false);
+                int progress = resultData.getInt("progress"); //get the progress
+                Log.v("DownloadProgress",String.valueOf(progress));
+                mProgressDialog.setProgress(progress);
+                if (progress == 100) {
+                    mProgressDialog.dismiss();
+                    File toInstall = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "RetailReport" + ".apk");
+                    Intent intent;
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                        count++;
+                        if (count ==1) {
+                            Log.v("Update", "Installing : " + toInstall);
+                            Uri apkUri = FileProvider.getUriForFile(FSplash.this, BuildConfig.APPLICATION_ID + ".fileprovider", toInstall);
+                            intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
+                            intent.setData(apkUri);
+                            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                            startActivity(intent);
+//                            finish();
+                        } else {
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    count = 0;
+                                }
+                            }, 2000);
+                        }
+                    } else {
+                        count++;
+                        if (count ==1) {
+                            Log.v("Update", "Installing 2 : "+toInstall);
+                            Uri apkUri = Uri.fromFile(toInstall);
+                            intent = new Intent(Intent.ACTION_VIEW);
+                            intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            startActivity(intent);
+//                            finish();
+                        } else {
+                            Handler handler = new Handler();
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    count = 0;
+                                }
+                            }, 2000);
+                        }
+                    }
+                }
+            }
+        }
     }
 }
