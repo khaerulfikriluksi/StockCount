@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "839302209087",
+    "project_id": "stockapp-4abf1",
+    "storage_bucket": "stockapp-4abf1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:839302209087:android:896aa9e5c80f063121628a",
+        "android_client_info": {
+          "package_name": "com.urban.stockapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "839302209087-i494juafjihf7q17o1r1k12i77rqhcvh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6Jz1dJHqSoJ-z1qgKozztKhVeHvk-9Rs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "839302209087-i494juafjihf7q17o1r1k12i77rqhcvh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

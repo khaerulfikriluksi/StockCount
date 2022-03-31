@@ -1,0 +1,255 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".FHistory_StockRequest">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/str_hist_appbar"
+        android:layout_width="match_parent"
+        app:elevation="0dp"
+        android:layout_height="80dp">
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/str_hist_collapsing"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:scrimAnimationDuration="300"
+            app:expandedTitleTextAppearance="@style/CollapsedAppBarPlus1"
+            app:collapsedTitleTextAppearance="@style/CollapsedAppBarPlus2"
+            app:titleEnabled="true"
+            android:fitsSystemWindows="true"
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
+            android:background="@color/white"
+            app:contentScrim="@color/white">
+        <!--            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed"-->
+
+            <androidx.appcompat.widget.Toolbar
+                android:id="@+id/str_hist_toolbar"
+                android:layout_width="match_parent"
+                app:titleTextColor="@color/white"
+                android:layout_height="wrap_content"
+                app:subtitleTextColor="@color/white"
+                app:layout_collapseMode="pin">
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:id="@+id/art_search_card"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                    app:cardCornerRadius="40dp"
+                    app:cardElevation="2dp"
+                    android:layout_height="56dp">
+
+                    <RelativeLayout
+                        android:background="@color/putih_pucat"
+                        android:layout_width="fill_parent"
+                        android:layout_height="fill_parent">
+
+                        <ImageButton
+                            android:foreground="?android:attr/selectableItemBackground"
+                            android:clickable="true"
+                            android:onClick="kembali_home"
+                            android:layout_marginLeft="15dp"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_centerVertical="true"
+                            android:layout_alignParentLeft="true"
+                            android:background="@drawable/ico_kembali_wrntext"/>
+
+                        <EditText
+                            android:id="@+id/str_hist_search"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginLeft="45dp"
+                            android:layout_marginRight="45dp"
+                            android:background="@android:color/transparent"
+                            android:gravity="center"
+                            android:hint="Cari Data"
+                            android:imeOptions="actionSearch"
+                            android:maxLines="1"
+                            android:singleLine="true" />
+
+                        <ImageButton
+                            android:id="@+id/str_hist_bfilter"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:onClick="OpenFilter"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginRight="15dp"
+                            android:background="@drawable/ico_filter_wrntext"
+                            android:clickable="true"
+                            android:foreground="?android:attr/selectableItemBackground" />
+
+                    </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </androidx.appcompat.widget.Toolbar>
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:id="@+id/str_hist_nested"
+        app:layout_anchorGravity="bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:paddingTop="10dp"
+        android:fillViewport="true"
+        app:elevation="10dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/str_hist_pullToRefresh"
+            android:layout_width="match_parent"
+            android:layout_marginBottom="85dp"
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/str_hist_listview"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:divider="@null"
+                android:dividerHeight="0dp"
+                android:scrollbars="none"
+                android:layout_height="match_parent" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="10dp"
+        android:baselineAlignBottom="false"
+        android:backgroundTint="@color/warna_text"
+        android:id="@+id/str_hist_new"
+        android:clickable="true"
+        app:tint="@null"
+        android:src="@drawable/ico_tambah"
+        app:fabSize="normal"
+        app:layout_anchor="@+id/str_hist_pagelayout"
+        app:layout_anchorGravity="end|top" />
+    <!--        app:layout_anchor="@+id/sls_appbar"-->
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/str_hist_animsearch"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/cari_json" />
+
+    <LinearLayout
+        android:id="@+id/str_hist_nointernet"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="visible"
+        android:layout_height="wrap_content">
+
+        <com.airbnb.lottie.LottieAnimationView
+            android:id="@+id/str_hist_animnointernet"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="center"
+            android:nestedScrollingEnabled="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:lottie_autoPlay="true"
+            app:lottie_loop="true"
+            app:lottie_rawRes="@raw/no_connection_json" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:onClick="refreshgetSTR"
+            style="@style/SilverRoundedButton"
+            android:textColor="@color/warna_text"
+            android:text="Refresh"
+            android:textAllCaps="false" />
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:padding="12dp"
+        app:layout_anchorGravity="bottom"
+        android:background="@color/putih_pucat"
+        android:orientation="horizontal"
+        app:layout_anchor="@+id/str_hist_nested"
+        android:layout_height="wrap_content"
+        android:id="@+id/str_hist_pagelayout">
+
+        <Button
+            android:id="@+id/str_hist_first"
+            android:enabled="false"
+            android:layout_width="40dp"
+            android:background="@drawable/ico_firstpage_wrntext"
+            android:layout_height="40dp"/>
+
+        <Button
+            android:id="@+id/str_hist_prev"
+            android:enabled="false"
+            android:layout_width="40dp"
+            android:background="@drawable/ico_prev_wrntext"
+            android:layout_height="40dp"/>
+
+        <EditText
+            android:id="@+id/str_hist_curpage"
+            android:layout_width="50dp"
+            android:digits="1234567890"
+            android:inputType="number"
+            android:imeOptions="actionDone"
+            android:singleLine="true"
+            android:maxLines="1"
+            android:gravity="center"
+            android:text="1"
+            android:textColor="@color/warna_text"
+            android:background="@color/white"
+            android:layout_height="40dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:text="Of"
+            android:textSize="20dp"
+            android:layout_height="40dp"/>
+        <TextView
+            android:id="@+id/str_hist_numpage"
+            android:layout_width="wrap_content"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:text="1"
+            android:textSize="20dp"
+            android:layout_height="40dp"/>
+
+        <Button
+            android:id="@+id/str_hist_next"
+            android:layout_width="40dp"
+            android:background="@drawable/ico_next_wrntext"
+            android:layout_height="40dp"/>
+
+        <Button
+            android:layout_width="40dp"
+            android:id="@+id/str_hist_last"
+            android:background="@drawable/ico_lastpage_wrntext"
+            android:layout_height="40dp"/>
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

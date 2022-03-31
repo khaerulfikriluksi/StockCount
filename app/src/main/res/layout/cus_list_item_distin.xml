@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:paddingLeft="7dp"
+    android:layout_marginTop="5dp"
+    android:layout_marginBottom="5dp"
+    android:paddingRight="7dp"
+    android:layout_height="wrap_content">
+<!--    android:descendantFocusability="blocksDescendants"-->
+
+<!--    <androidx.cardview.widget.CardView-->
+<!--        app:cardElevation="0dp"-->
+<!--        android:layout_marginTop="5dp"-->
+<!--        android:layout_marginBottom="5dp"-->
+<!--        app:cardCornerRadius="15dp"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content">-->
+
+        <LinearLayout
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp"
+            android:layout_width="match_parent"
+            android:background="@color/white"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:layout_marginLeft="7dp"
+                android:id="@+id/din_check"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:visibility="visible" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:layout_height="wrap_content" >
+
+                    <TextView
+                        android:layout_marginLeft="10dp"
+                        android:id="@+id/din_namabrg"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:text="KENJI BLACK 13"
+                        android:textColor="@color/warna_text"
+                        android:textSize="15dp"
+                        android:textStyle="bold" />
+
+                    <RelativeLayout
+                        android:layout_marginLeft="10dp"
+                        android:layout_width="fill_parent"
+                        android:orientation="horizontal"
+                        android:layout_height="fill_parent">
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_alignParentLeft="true"
+                            android:orientation="vertical"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:id="@+id/din_kodebrg"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical"
+                                android:text="1000010098434"
+                                android:textColor="@color/warna_text"
+                                android:textSize="13dp"
+                                android:textStyle="bold" />
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:orientation="horizontal"
+                                android:layout_height="match_parent">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:orientation="horizontal"
+                                    android:layout_height="wrap_content">
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:textStyle="bold"
+                                        android:textColor="@color/biru_muda"
+                                        android:text="Terkirim : "
+                                        android:layout_height="wrap_content"/>
+
+                                    <TextView
+                                        android:id="@+id/din_qtyterkirim"
+                                        android:textStyle="bold"
+                                        android:layout_width="wrap_content"
+                                        android:textColor="@color/biru_muda"
+                                        android:text="8.235 Pcs"
+                                        android:layout_height="wrap_content"/>
+
+                                </LinearLayout>
+                            </LinearLayout>
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:gravity="right"
+                            android:layout_height="wrap_content">
+
+                            <Button
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:clickable="true"
+                                android:id="@+id/din_min_qty"
+                                android:layout_gravity="center"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:background="@drawable/ico_del" />
+
+                            <EditText
+                                android:id="@+id/din_qtyditerima"
+                                android:layout_width="70dp"
+                                android:layout_height="wrap_content"
+                                android:digits="0123456789"
+                                android:gravity="center"
+                                android:layout_gravity="center"
+                                android:imeOptions="actionDone"
+                                android:maxLines="1"
+                                android:selectAllOnFocus="true"
+                                android:singleLine="true"
+                                android:text="0"
+                                android:textSize="17dp" />
+
+                            <Button
+                                android:clickable="true"
+                                android:foreground="?android:attr/selectableItemBackground"
+                                android:id="@+id/din_plus_qty"
+                                android:layout_width="35dp"
+                                android:layout_height="35dp"
+                                android:layout_gravity="center"
+                                android:background="@drawable/ico_add" />
+
+                        </LinearLayout>
+                    </RelativeLayout>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+<!--    </androidx.cardview.widget.CardView>-->
+</LinearLayout>

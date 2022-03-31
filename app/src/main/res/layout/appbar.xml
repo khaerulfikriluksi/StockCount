@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.appcompat.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/Tollbar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@drawable/roundhead"
+    android:elevation="4dp"
+    app:subtitleTextColor="#00FFFFFF"
+    app:titleTextColor="#00FFFFFF">
+
+</androidx.appcompat.widget.Toolbar>

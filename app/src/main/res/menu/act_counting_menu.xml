@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ast="http://schemas.android.com/apk/res-auto">
+    <item
+        android:title="Void Data"
+        ast:showAsAction="always"
+        android:id="@+id/bvoidcount"
+        android:icon="@drawable/ico_void">
+    </item>
+    <item
+        android:title="Switch Scan Mode"
+        ast:showAsAction="always"
+        android:id="@+id/bscan"
+        android:icon="@drawable/ico_manual">
+    </item>
+    <item
+        android:title="Share"
+        ast:showAsAction="never"
+        android:icon="@drawable/ico_share"
+        android:id="@+id/bexportcsv">
+    </item>
+    <item
+        android:title="Save to internal"
+        ast:showAsAction="never"
+        android:icon="@drawable/ico_save_red"
+        android:iconTint="@color/white"
+        android:id="@+id/bsavecsv">
+    </item>
+    <item
+        android:title="Upload to cloud"
+        ast:showAsAction="never"
+        android:icon="@drawable/ico_upload_red"
+        android:iconTint="@color/white"
+        android:id="@+id/buploadcsv">
+    </item>
+</menu>

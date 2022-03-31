@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+    android:id="@+id/bottompopup"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:windowSoftInputMode="adjustResize"
+    android:background="@color/white"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/roboto_regular"
+        android:textColor="@color/warna_text"
+        android:textSize="14dp"
+        android:layout_marginLeft="24dp"
+        android:text="Mohon masukkan No. Bukti yang valid"
+        android:layout_height="wrap_content"/>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="24dp"
+        app:expandedHintEnabled="false"
+        android:id="@+id/din_newnobukti_head"
+        app:helperTextTextColor="@color/merah"
+        android:layout_marginRight="24dp"
+        android:hint="No. Bukti"
+        android:layout_height="wrap_content">
+
+        <AutoCompleteTextView
+            android:id="@+id/din_newnobukti"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:completionThreshold="1"
+            android:gravity="center_vertical"
+            android:imeOptions="actionDone"
+            android:maxLines="1"
+            android:paddingLeft="15dp"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="24dp"
+        app:expandedHintEnabled="false"
+        android:id="@+id/din_tglmasuk_head"
+        app:helperTextTextColor="@color/merah"
+        android:layout_marginRight="24dp"
+        android:hint="Tanggal Masuk"
+        android:layout_height="wrap_content">
+
+        <AutoCompleteTextView
+            android:id="@+id/din_tglmasuk"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:completionThreshold="1"
+            android:inputType="none"
+            android:gravity="center_vertical"
+            android:imeOptions="actionDone"
+            android:maxLines="1"
+            android:paddingLeft="15dp"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="24dp"
+        android:visibility="gone"
+        app:expandedHintEnabled="false"
+        android:id="@+id/din_keterangan_head"
+        app:helperTextTextColor="@color/merah"
+        android:layout_marginRight="24dp"
+        android:hint="Keterangan (Opsional)"
+        android:layout_height="150dp">
+
+        <AutoCompleteTextView
+            android:id="@+id/din_keterangan"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingTop="15dp"
+            android:inputType="textMultiLine"
+            android:gravity="left|top"
+            android:imeOptions="actionDone"
+            android:paddingLeft="15dp"
+            android:singleLine="true" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <LinearLayout
+        android:layout_marginTop="20dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center">
+        <br.com.simplepass.loadingbutton.customViews.CircularProgressButton
+            android:id="@+id/din_get"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:spinning_bar_padding="6dp"
+            app:spinning_bar_color="@color/white"
+            android:layout_centerInParent="true"
+            android:layout_marginLeft="100dp"
+            android:layout_marginRight="100dp"
+            android:background="@drawable/round_ungu"
+            android:fontFamily="@font/roboto_regular"
+            android:text="BUAT"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:gravity="center"
+        android:orientation="vertical"/>
+
+</LinearLayout>

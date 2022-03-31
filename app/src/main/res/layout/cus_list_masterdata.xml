@@ -1,0 +1,30 @@
+<LinearLayout
+    android:id="@+id/relativeLayout1"
+    android:layout_height="fill_parent"
+    android:layout_width="fill_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <TextView
+        android:id="@+id/textter1"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="First"
+        android:textSize="20dp"></TextView>
+
+    <View
+        android:layout_width="0.5dp"
+        android:layout_height="30dp"
+        android:background="#808080" />
+
+    <TextView
+        android:id="@+id/textter2"
+        android:layout_width="0dp"
+        android:layout_marginLeft="2dp"
+        android:layout_height="30dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:text="Second"
+        android:textSize="20dp"></TextView>
+</LinearLayout>

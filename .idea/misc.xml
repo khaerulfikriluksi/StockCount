@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/b_menu1.xml" value="0.1899122807017544" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/background.xml" value="0.1899122807017544" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/btn_custom.xml" value="0.1899122807017544" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/download_background.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/et_custom.xml" value="0.1899122807017544" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/ic_arrow_left.xml" value="0.1899122807017544" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/ic_arrow_right.xml" value="0.1899122807017544" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/ico_deletered.xml" value="0.172" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/ico_download_red.xml" value="0.151" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/ico_menu.xml" value="0.172" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/ico_share.xml" value="0.172" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/popup_newscan.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/refresh_background.xml" value="0.172" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/round_corner_all_white.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/round_head_ungu_bg.xml" value="0.1899122807017544" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/round_hijau.xml" value="0.172" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/round_kuning.xml" value="0.1899122807017544" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/round_merah.xml" value="0.172" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/round_silver_bg.xml" value="0.172" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/round_ungu.xml" value="0.1899122807017544" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/roundhead.xml" value="0.22552083333333334" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/selector_colour_menu_utama.xml" value="0.1899122807017544" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/drawable/ungu_head.xml" value="0.1899122807017544" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/act_counting.xml" value="0.1983695652173913" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/activity_history.xml" value="0.1983695652173913" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/activity_main.xml" value="0.15443840579710144" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/appbar.xml" value="0.1983695652173913" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/bottom_sheet_newcounting.xml" value="0.33" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/bottom_sheet_newdistin.xml" value="0.33" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/cus_list_item_distin.xml" value="0.33" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/cus_list_item_histstkreq.xml" value="0.33" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/cus_list_item_scan.xml" value="0.33" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/cus_list_scan.xml" value="0.1453804347826087" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/cust_adapter_historydistin.xml" value="0.33" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/cust_dropdown_spinner.xml" value="0.1763157894736842" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/cust_list_history.xml" value="0.33" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/cust_new_dist_in.xml" value="0.33" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/cust_popup_filterhist_stk.xml" value="0.25" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/cust_popup_nameshare.xml" value="0.25" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/cust_popup_newdistin.xml" value="0.25" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/cust_popup_remarks.xml" value="0.25" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/cust_popup_reset_login.xml" value="0.33" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/cust_popup_scan.xml" value="0.25" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/cust_popup_setting.xml" value="0.25" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/cust_popup_updateuser.xml" value="0.25" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/custom_list_scan.xml" value="0.1983695652173913" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fcounting_stock.xml" value="0.209375" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fdashboard_menu.xml" value="0.1763157894736842" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fdist_in.xml" value="0.25" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fdistin.xml" value="0.33" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fhistory_counting.xml" value="0.209375" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fhistory_distin.xml" value="0.1763157894736842" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fhistory_stock_request.xml" value="0.25" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/flist_stock_request.xml" value="0.1763157894736842" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/flogin.xml" value="0.25" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fmenu_utama.xml" value="0.209375" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fmenulist.xml" value="0.25" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fragment_cari_stk_request.xml" value="0.33" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fregister.xml" value="0.22" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fsetting.xml" value="0.25" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fsplash.xml" value="0.209375" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fuser.xml" value="0.25" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/import_csv.xml" value="0.1403985507246377" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/list_item_history.xml" value="0.1671195652173913" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/list_itembrg.xml" value="0.1983695652173913" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/menu_utama.xml" value="0.1671195652173913" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/new_scan.xml" value="0.1983695652173913" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/round_hijau.xml" value="0.1763157894736842" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/menu/act_counting_menu.xml" value="0.1763157894736842" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/menu/csvmenu.xml" value="0.209375" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/menu/history_list_menu.xml" value="0.1763157894736842" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/menu/item_menu_home.xml" value="0.2" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/menu/menu_history.xml" value="0.1763157894736842" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/mipmap-anydpi-v26/download.xml" value="0.1" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/mipmap-anydpi-v26/download_round.xml" value="0.1" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/drawable/HeaderBG_background.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/drawable/activity_spalsh.xml" value="0.11096014492753623" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/drawable/b_menu1.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/drawable/b_menu2.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/drawable/b_menu3.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/drawable/bg_cardbox2_background.xml" value="0.11614583333333334" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/drawable/dropdown_item_height.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/drawable/ic_launcher_background.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/drawable/ico_delete.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/drawable/ico_deleteitemscan.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/drawable/ico_textmanual.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/drawable/popup_newscan.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/drawable/refresh_background.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/drawable/roundhead.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/act_counting.xml" value="0.22" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/act_history.xml" value="0.1897644927536232" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/activity_fmaster_data.xml" value="0.2" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/activity_history.xml" value="0.1897644927536232" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/activity_main.xml" value="0.25" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/appbar.xml" value="0.33" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/content_splash.xml" value="0.22" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/custom_layout.xml" value="0.16576086956521738" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/custom_list_scan.xml" value="0.25" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/fragment_f_master_data.xml" value="0.16" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/import_csv.xml" value="0.33" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/item_brg.xml" value="0.16576086956521738" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/list_item_history.xml" value="0.25" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/list_itembrg.xml" value="0.33" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/menu_utama.xml" value="0.30116959064327486" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/my_tool.xml" value="0.16576086956521738" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/new_scan.xml" value="0.25" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/popup_newscan.xml" value="0.209375" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/reg_tolbar.xml" value="0.16576086956521738" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/layout/roundhead.xml" value="0.19610507246376813" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/menu/act_counting_menu.xml" value="0.209375" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/menu/csvmenu.xml" value="0.25" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/menu/manu_history.xml" value="0.209375" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/mipmap-anydpi-v26/HeaderBG.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.22552083333333334" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/xml/file_paths.xml" value="0.19610507246376813" />
+        <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/xml/provider_paths.xml" value="0.19610507246376813" />
+        <entry key="..\:/Users/ACER/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/list_content.xml" value="0.15307971014492755" />
+        <entry key="..\:/Users/ACER/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_list_item_1.xml" value="0.16576086956521738" />
+        <entry key="..\:/Users/ACER/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_list_item_2.xml" value="0.16576086956521738" />
+        <entry key="..\:/Users/ACER/AppData/Local/Android/Sdk/platforms/android-31/data/res/layout/simple_spinner_dropdown_item.xml" value="0.15307971014492755" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectPlainTextFileTypeManager">
+    <file url="file://$PROJECT_DIR$/app/google-services.json" />
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
