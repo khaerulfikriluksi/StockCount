@@ -39,7 +39,7 @@ public class DownloadService extends IntentService {
             // download the file
             InputStream input = new BufferedInputStream(connection.getInputStream());
 
-            String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/RetailReport.apk" ;
+            String path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/StockApp.apk" ;
             File file = new File(path);
             if (file.exists())
                 file.delete();
