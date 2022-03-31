@@ -58,6 +58,7 @@
         <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fhistory_stock_request.xml" value="0.25" />
         <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/flist_stock_request.xml" value="0.1763157894736842" />
         <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/flogin.xml" value="0.25" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fmasterdata.xml" value="0.1763157894736842" />
         <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fmenu_utama.xml" value="0.209375" />
         <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fmenulist.xml" value="0.25" />
         <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/layout/fragment_cari_stk_request.xml" value="0.33" />
@@ -78,6 +79,7 @@
         <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/menu/menu_history.xml" value="0.1763157894736842" />
         <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/mipmap-anydpi-v26/download.xml" value="0.1" />
         <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/mipmap-anydpi-v26/download_round.xml" value="0.1" />
+        <entry key="..\:/Android Studio/Project/StockCount2/app/src/main/res/xml/download_path.xml" value="0.10438596491228071" />
         <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.22552083333333334" />
         <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/drawable/HeaderBG_background.xml" value="0.22552083333333334" />
         <entry key="..\:/Users/ACER/AndroidStudioProjects/StockCount2/app/src/main/res/drawable/activity_spalsh.xml" value="0.11096014492753623" />

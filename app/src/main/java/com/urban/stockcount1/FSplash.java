@@ -649,6 +649,7 @@ public class FSplash extends AppCompatActivity implements UpdateHelper.onUpdateC
                                 builder.show();
                             }
                         } catch (JSONException e) {
+                            Log.v("C",e.getMessage());
                             if (progressDialog.isShowing()) progressDialog.dismiss();
                             AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
                             builder.setTitle("Application error");
@@ -1002,22 +1003,21 @@ public class FSplash extends AppCompatActivity implements UpdateHelper.onUpdateC
             if (resultCode == DownloadService.UPDATE_PROGRESS) {
                 mProgressDialog.setIndeterminate(false);
                 int progress = resultData.getInt("progress"); //get the progress
-                Log.v("DownloadProgress",String.valueOf(progress));
+//                Log.v("DownloadProgress",String.valueOf(progress));
                 mProgressDialog.setProgress(progress);
                 if (progress == 100) {
                     mProgressDialog.dismiss();
-                    File toInstall = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "RetailReport" + ".apk");
+                    File toInstall = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), "StockApp" + ".apk");
                     Intent intent;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         count++;
                         if (count ==1) {
-                            Log.v("Update", "Installing : " + toInstall);
-                            Uri apkUri = FileProvider.getUriForFile(FSplash.this, BuildConfig.APPLICATION_ID + ".fileprovider", toInstall);
+                            Uri apkUri = FileProvider.getUriForFile(FSplash.this, BuildConfig.APPLICATION_ID, toInstall);
                             intent = new Intent(Intent.ACTION_INSTALL_PACKAGE);
                             intent.setData(apkUri);
                             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                             startActivity(intent);
-//                            finish();
+                            finish();
                         } else {
                             Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
@@ -1030,13 +1030,12 @@ public class FSplash extends AppCompatActivity implements UpdateHelper.onUpdateC
                     } else {
                         count++;
                         if (count ==1) {
-                            Log.v("Update", "Installing 2 : "+toInstall);
                             Uri apkUri = Uri.fromFile(toInstall);
                             intent = new Intent(Intent.ACTION_VIEW);
                             intent.setDataAndType(apkUri, "application/vnd.android.package-archive");
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             startActivity(intent);
-//                            finish();
+                            finish();
                         } else {
                             Handler handler = new Handler();
                             handler.postDelayed(new Runnable() {
