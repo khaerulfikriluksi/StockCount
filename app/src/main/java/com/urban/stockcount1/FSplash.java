@@ -584,8 +584,8 @@ public class FSplash extends AppCompatActivity implements UpdateHelper.onUpdateC
             }
         };
         RequestQueue requestQueue = Volley.newRequestQueue(FSplash.this);
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(0,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//        stringRequest.setRetryPolicy(new DefaultRetryPolicy(0,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         requestQueue.add(stringRequest);
     }
 
