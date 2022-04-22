@@ -544,7 +544,7 @@ public class FSplash extends AppCompatActivity implements UpdateHelper.onUpdateC
                         AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
                         builder.setTitle("Connection problem");
                         builder.setCancelable(false);
-                        builder.setMessage("Koneksi server bermasalah, Mohon cek koneksi anda kemudian refresh kembali");
+                        builder.setMessage("Butuh login terlebihdahulu, Koneksi tidak stabil");
                         builder.setNeutralButton("Refresh", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
