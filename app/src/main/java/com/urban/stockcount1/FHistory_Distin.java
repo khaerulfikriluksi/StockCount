@@ -1,6 +1,7 @@
 package com.urban.stockcount1;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -88,7 +89,10 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.google.zxing.Result;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 import com.opencsv.CSVWriter;
+import com.urban.stockcount1.CustomClass.Capture;
 import com.urban.stockcount1.CustomClass.ListDistHistAdapter;
 import com.urban.stockcount1.CustomClass.ListHistoryAdapter;
 import com.urban.stockcount1.CustomClass.UploadCSV;
@@ -119,6 +123,7 @@ public class FHistory_Distin extends AppCompatActivity {
     private FloatingActionButton din_add;
     private CircularProgressButton din_get;
     private LottieAnimationView din_nodata_anim;
+    private TextInputLayout din_newnobukti_head,din_tglmasuk_head;
     private ListDistHistAdapter listDistHistAdapter;
     private ListView din_historylist;
     private static ActionMode actionMode=null;
@@ -174,8 +179,8 @@ public class FHistory_Distin extends AppCompatActivity {
                         AlertDialog.Builder buildernewdis = new AlertDialog.Builder(FHistory_Distin.this);
                         LayoutInflater inflater = FHistory_Distin.this.getLayoutInflater();
                         View view = inflater.inflate(R.layout.cust_popup_newdistin, null);
-                        TextInputLayout din_newnobukti_head = (TextInputLayout) view.findViewById(R.id.din_newnobukti_head),
-                                din_tglmasuk_head = (TextInputLayout) view.findViewById(R.id.din_tglmasuk_head);
+                        din_newnobukti_head = (TextInputLayout) view.findViewById(R.id.din_newnobukti_head);
+                        din_tglmasuk_head = (TextInputLayout) view.findViewById(R.id.din_tglmasuk_head);
                         din_newnobukti = (AutoCompleteTextView) view.findViewById(R.id.din_newnobukti);
                         din_tglmasuk = (AutoCompleteTextView) view.findViewById(R.id.din_tglmasuk);
                         din_keterangan = (AutoCompleteTextView) view.findViewById(R.id.din_keterangan);
@@ -276,42 +281,48 @@ public class FHistory_Distin extends AppCompatActivity {
                             public void onClick(View v) {
                                 InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
                                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                                AlertDialog.Builder builderscan = new AlertDialog.Builder(FHistory_Distin.this);
-                                LayoutInflater inflater2 = FHistory_Distin.this.getLayoutInflater();
-                                View view2 = inflater2.inflate(R.layout.cust_popup_scan, null);
-                                ZXingScannerView camera = (ZXingScannerView) view2.findViewById(R.id.camera);
-                                camera.setOnClickListener(new View.OnClickListener() {
-                                    @Override
-                                    public void onClick(View v) {
-                                        camera.toggleFlash();
-                                    }
-                                });
-                                camera.setResultHandler(new ZXingScannerView.ResultHandler() {
-                                    @Override
-                                    public void handleResult(Result result) {
-                                        din_newnobukti_head.setHelperText(null);
-                                        din_newnobukti.setText(result.getText());
-                                        camera.stopCamera();
-                                        final Handler handler = new Handler();
-                                        handler.postDelayed(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                show2.dismiss();
-                                            }
-                                        }, 500);
-                                    }
-                                });
-                                builderscan.setCancelable(false);
-                                camera.startCamera();
-                                builderscan.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        show2.dismiss();
-                                    }
-                                });
-                                builderscan.setView(view2);
-                                show2=builderscan.show();
-                                show2.getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
+                                IntentIntegrator intentIntegrator = new IntentIntegrator(FHistory_Distin.this);
+                                intentIntegrator.setPrompt("Volume Up = Flash On,  Volume Down = Flash Off");
+                                intentIntegrator.setBeepEnabled(true);
+                                intentIntegrator.setOrientationLocked(true);
+                                intentIntegrator.setCaptureActivity(Capture.class);
+                                intentIntegrator.initiateScan();
+//                                AlertDialog.Builder builderscan = new AlertDialog.Builder(FHistory_Distin.this);
+//                                LayoutInflater inflater2 = FHistory_Distin.this.getLayoutInflater();
+//                                View view2 = inflater2.inflate(R.layout.cust_popup_scan, null);
+//                                ZXingScannerView camera = (ZXingScannerView) view2.findViewById(R.id.camera);
+//                                camera.setOnClickListener(new View.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(View v) {
+//                                        camera.toggleFlash();
+//                                    }
+//                                });
+//                                camera.setResultHandler(new ZXingScannerView.ResultHandler() {
+//                                    @Override
+//                                    public void handleResult(Result result) {
+//                                        din_newnobukti_head.setHelperText(null);
+//                                        din_newnobukti.setText(result.getText());
+//                                        camera.stopCamera();
+//                                        final Handler handler = new Handler();
+//                                        handler.postDelayed(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                show2.dismiss();
+//                                            }
+//                                        }, 500);
+//                                    }
+//                                });
+//                                builderscan.setCancelable(false);
+//                                camera.startCamera();
+//                                builderscan.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        show2.dismiss();
+//                                    }
+//                                });
+//                                builderscan.setView(view2);
+//                                show2=builderscan.show();
+//                                show2.getWindow().setLayout(WindowManager.LayoutParams.FILL_PARENT,WindowManager.LayoutParams.WRAP_CONTENT);
                             }
                         });
                         buildernewdis.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
@@ -357,6 +368,18 @@ public class FHistory_Distin extends AppCompatActivity {
                 }
             });
             builder.show();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        IntentResult intentResult = IntentIntegrator.parseActivityResult(
+                requestCode,resultCode,data
+        );
+        if (intentResult.getContents() != null) {
+            din_newnobukti_head.setHelperText(null);
+            din_newnobukti.setText(intentResult.getContents());
         }
     }
 
@@ -1056,7 +1079,7 @@ public class FHistory_Distin extends AppCompatActivity {
                             if (status==200) {
                                 db.execSQL("delete from tbl_distin where `No_bukti`='"+nobukti+"'");
                                 db.execSQL("delete from tbl_distin_detail where `No_bukti`='"+nobukti+"'");
-                                String NoBuk=null, keterangan=null, Kode_departemen=null, expedisi=null, no_pol=null, No_SuratJalan=null, tgl_kirim=null, Kode_user=null, Total_jual=null, Total_beli=null,kd_penerima=null,Penerima=null,kd_pengirim=null,Pengirim=null,TotalQTYHead=null,tglbuat=null;
+                                String NoBuk=null, Kode_departemen=null, expedisi=null, no_pol=null, No_SuratJalan=null, tgl_kirim=null, Kode_user=null, Total_jual=null, Total_beli=null,kd_penerima=null,Penerima=null,kd_pengirim=null,Pengirim=null,TotalQTYHead=null,tglbuat=null;
                                 JSONArray jsonArray = jsonObject.getJSONArray("data");
                                 for (int position = 0; position < jsonArray.length(); position++) {
                                     JSONObject row = jsonArray.getJSONObject(position);
@@ -1084,12 +1107,11 @@ public class FHistory_Distin extends AppCompatActivity {
                                     String Qty = row.getString("Qty");
                                     String nama_penerima = row.getString("nama_penerima");
                                     String nama_pengirim = row.getString("nama_pengirim");
-                                    keterangan = row.getString("Keterangan");
                                     db.execSQL("INSERT INTO tbl_distin_detail (`No_bukti`,`Kode_Penerima`,`nama_penerima`,`Kode_Pengirim`,`nama_pengirim`,`Kode_barang`,`Qty`,`Qty_receive`,`harga_beli`,`harga_jual`) " +
                                             "VALUES('"+No_bukti+"','"+Kode_Penerima+"','"+nama_penerima+"','"+Kode_Pengirim+"','"+nama_pengirim+"','"+Kode_barang+"','"+Qty+"','0','"+harga_beli+"','"+harga_jual+"');");
                                 }
                                 db.execSQL("INSERT INTO tbl_distin (`No_bukti`,`Kode_Penerima`,`nama_penerima`,`Kode_Pengirim`,`nama_pengirim`,`Kode_departemen`,`Total_qty`,`Total_qty_receive`,`Total_beli`,`Total_jual`,`nama_penghitung`,`id_user`,`Kode_user`,`tgl_kirim`,`keterangan`,`tanggal_masuk`,`tanggal_buat`,`No_SuratJalan`,`no_pol`,`expedisi`) " +
-                                        "VALUES('"+NoBuk+"','"+kd_penerima+"','"+Penerima+"','"+kd_pengirim+"','"+Pengirim+"','"+Kode_departemen+"','"+TotalQTYHead+"','0','"+Total_beli+"','"+Total_jual+"','"+usr_alias+"','"+id_user+"','"+Kode_user+"','"+tgl_kirim+"','"+keterangan+"','"+tglmasuk+"','"+tglbuat+"','"+No_SuratJalan+"','"+no_pol+"','"+expedisi+"');");
+                                        "VALUES('"+NoBuk+"','"+kd_penerima+"','"+Penerima+"','"+kd_pengirim+"','"+Pengirim+"','"+Kode_departemen+"','"+TotalQTYHead+"','0','"+Total_beli+"','"+Total_jual+"','"+usr_alias+"','"+id_user+"','"+Kode_user+"','"+tgl_kirim+"','','"+tglmasuk+"','"+tglbuat+"','"+No_SuratJalan+"','"+no_pol+"','"+expedisi+"');");
                                 Intent Formku = new Intent(FHistory_Distin.this, FDistin.class);
                                 Formku.putExtra("id", NoBuk);
                                 startActivity(Formku);

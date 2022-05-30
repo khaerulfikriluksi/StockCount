@@ -90,6 +90,11 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".CustomClass.Capture"
+            android:screenOrientation="landscape"
+            android:stateNotNeeded="true"
+            android:theme="@style/zxing_CaptureTheme"/>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.urban.stockapp"
