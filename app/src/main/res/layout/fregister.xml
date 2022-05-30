@@ -79,7 +79,7 @@
                             android:inputType="textCapCharacters"
                             android:paddingLeft="15dp"
                             android:singleLine="true"
-                            android:textSize="15sp"
+                            android:textSize="14dp"
                             android:maxLines="1"
                             android:gravity="center_vertical"
                             android:layout_height="50dp"/>
@@ -108,7 +108,7 @@
                             android:inputType="textEmailAddress"
                             android:paddingLeft="15dp"
                             android:singleLine="true"
-                            android:textSize="15sp"
+                            android:textSize="14dp"
                             android:maxLines="1"
                             android:gravity="center_vertical"
                             android:layout_height="50dp"/>
@@ -132,6 +132,7 @@
                             android:id="@+id/reg_cabang"
                             android:layout_width="match_parent"
                             android:inputType="none"
+                            android:textSize="14dp"
                             android:gravity="left"
                             android:layout_height="50dp"/>
 
@@ -158,7 +159,8 @@
                             android:inputType="textPersonName"
                             android:paddingLeft="15dp"
                             android:singleLine="true"
-                            android:textSize="15sp"
+                            android:textAllCaps = "false"
+                            android:textSize="14dp"
                             android:maxLines="1"
                             android:gravity="center_vertical"
                             android:layout_height="50dp"/>
@@ -187,7 +189,7 @@
                             android:inputType="textPassword"
                             android:paddingLeft="15dp"
                             android:singleLine="true"
-                            android:textSize="15sp"
+                            android:textSize="14dp"
                             android:maxLines="1"
                             android:gravity="center_vertical"
                             android:layout_height="50dp"/>
@@ -215,7 +217,7 @@
                             android:inputType="textPassword"
                             android:paddingLeft="15dp"
                             android:singleLine="true"
-                            android:textSize="15sp"
+                            android:textSize="14dp"
                             android:maxLines="1"
                             android:gravity="center_vertical"
                             android:layout_height="50dp"/>
