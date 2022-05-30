@@ -206,7 +206,7 @@ public class FMasterData extends AppCompatActivity {
 
     private void getDatabrg(){
         HashMap<String, String> nameaddress = new HashMap<>();
-        Cursor cursor = db.rawQuery("SELECT * FROM tbl_barang", null);
+        Cursor cursor = db.rawQuery("SELECT * FROM tbl_barang LIMIT 1000", null);
         cursor.moveToFirst();
         for (int count = 0; count < cursor.getCount(); count++) {
             cursor.moveToPosition(count);
@@ -247,7 +247,7 @@ public class FMasterData extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 //Onchanged
                 HashMap<String, String> nameaddress = new HashMap<>();
-                Cursor cursor = db.rawQuery("SELECT * FROM tbl_barang WHERE `nama_barang` LIKE '%"+newText+"%'", null);
+                Cursor cursor = db.rawQuery("SELECT * FROM tbl_barang WHERE `nama_barang` LIKE '%"+newText+"%' LIMIT 1000", null);
                 cursor.moveToFirst();
                 for (int count = 0; count < cursor.getCount(); count++) {
                     cursor.moveToPosition(count);

@@ -174,7 +174,17 @@ public class FCounting_Stock extends AppCompatActivity implements ZXingScannerVi
             }
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-               if (layman.getVisibility()==View.VISIBLE) {
+                if (layman.getVisibility()==View.VISIBLE) {
+                    valu.clear();
+                    Cursor cr = db.rawQuery("select * from tbl_barang WHERE nama_barang LIKE '%"+emanual.getText().toString()+"%' OR kode_barang LIKE '%"+emanual.getText().toString()+"%' LIMIT 10",null);
+                    cr.moveToFirst();
+                    for (int countx = 0; countx < cr.getCount(); countx++) {
+                        cr.moveToPosition(countx);
+                        valu.add(cr.getString(0)+" : "+cr.getString(1));
+                    }
+                    emanual.setAdapter(new LimitArrayAdapter<String>(FCounting_Stock.this,
+                            android.R.layout.simple_dropdown_item_1line,
+                            valu));
                    String[] separated = s.toString().split(" : ");
                    Cursor cur = db.rawQuery("SELECT * FROM tbl_barang WHERE kode_barang='" + separated[0] + "'", null);
                    if (cur.getCount() >= 1) {
@@ -250,7 +260,8 @@ public class FCounting_Stock extends AppCompatActivity implements ZXingScannerVi
         @Override
         protected Void doInBackground(Void... voids) {
             valu.clear();
-            Cursor cr = db.rawQuery("select * from tbl_barang",null);
+//            Cursor cr = db.rawQuery("select * from tbl_barang WHERE nama_barang LIKE '%"+emanual.getText().toString()+"%' OR kode_barang LIKE '%"+emanual.getText().toString()+"%' LIMIT 100",null);
+            Cursor cr = db.rawQuery("select * from tbl_barang LIMIT 100",null);
             cr.moveToFirst();
             for (int count = 0; count < cr.getCount(); count++) {
                 cr.moveToPosition(count);
@@ -321,7 +332,7 @@ public class FCounting_Stock extends AppCompatActivity implements ZXingScannerVi
     public void handleResult(Result result) {
         toneGen1.startTone(ToneGenerator.TONE_DTMF_0,150);
         camvalue.setText(result.getText());
-        cam.stopCamera();
+//        cam.stopCamera();
         Cursor cur = db.rawQuery("SELECT * FROM tbl_barang WHERE kode_barang='"+result.getText()+"'",null);
         if (cur.getCount()>=1){
             db.execSQL("UPDATE tbl_counting_detail SET `qty`=`qty`+1 WHERE `kode_barang`='" + result.getText() + "' AND `no_doc`='" + lid.getText().toString() + "'");
@@ -338,23 +349,23 @@ public class FCounting_Stock extends AppCompatActivity implements ZXingScannerVi
             @Override
             public void run() {
                 camvalue.setText("Turn on Flash : Tap Cam Box");
-                cam.startCamera();
+//                cam.startCamera();
                 cam.resumeCameraPreview(FCounting_Stock.this);
             }
-        }, 500);
+        }, 50);
     }
     //OnResumeBarcode
     @Override
     protected void onResume(){
         super.onResume();
         cam.setResultHandler(FCounting_Stock.this);
-        cam.startCamera();
+//        cam.startCamera();
     }
     //onPauseBarcode
     @Override
     protected void onPause(){
         super.onPause();
-        cam.stopCamera();
+//        cam.stopCamera();
     }
 
 
