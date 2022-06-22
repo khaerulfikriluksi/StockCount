@@ -10,6 +10,7 @@ import androidx.core.content.FileProvider;
 
 import android.Manifest;
 import android.animation.Animator;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -17,6 +18,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.database.sqlite.SQLiteProgram;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -86,7 +89,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.URL;
+import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -98,14 +112,14 @@ import java.util.Map;
 
 public class FSplash extends AppCompatActivity implements UpdateHelper.onUpdateCheckListener {
     //Var
-    ProgressDialog progressDialog;
-    DatabaseHelper module;
-    Animation TextAnim;
-    TextView textnya;
-    String ApiLocal,ApiOnline,TokenIDFCM;
-    ProgressBar progres;
+    private ProgressDialog progressDialog;
+    private DatabaseHelper module;
+    private Animation TextAnim;
+    private TextView textnya;
+    private String ApiLocal,urldatabase,ApiOnline,TokenIDFCM;
+    private ProgressBar progres;
     private TextView spls_status;
-    SQLiteDatabase db;
+    private SQLiteDatabase db,dbonline;
     private FirebaseDatabase database;
     private DatabaseReference myRef,dbRef;
     private String device_id, ipfirebase,
@@ -116,6 +130,9 @@ public class FSplash extends AppCompatActivity implements UpdateHelper.onUpdateC
     private Intent permissionIntent;
     private ProgressDialog mProgressDialog;
     private int count=0;
+    private ProgressDialog pDialog;
+    public static final int progress_bar_type = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -130,7 +147,6 @@ public class FSplash extends AppCompatActivity implements UpdateHelper.onUpdateC
         module = new DatabaseHelper(this);
         db = SQLiteDatabase.openDatabase("data/data/com.urban.stockapp/databases/stockapp.db", null,
                 SQLiteDatabase.OPEN_READWRITE);
-
         ApiOnline="";
         ApiLocal="";
 
@@ -182,27 +198,6 @@ public class FSplash extends AppCompatActivity implements UpdateHelper.onUpdateC
         myRef.child("ipconfig").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DataSnapshot> task) {
-//                if (!task.isSuccessful()) {
-//                    Log.e("firebase", "Error getting data", task.getException());
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
-//                    builder.setTitle("Application Error");
-//                    builder.setCancelable(false);
-//                    builder.setMessage("Google services tidak merespon, silahkan kontak developer/mulai offline?");
-//                    builder.setPositiveButton("Offline", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            Gettoken();
-//                        }
-//                    });
-//                    builder.setNegativeButton("Tutup aplikasi", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                            dialog.cancel();
-//                            System.exit(0);
-//                        }
-//                    });
-//                    builder.show();
-//                }
                 if(task.isSuccessful()) {
                     db.execSQL("DELETE FROM tbl_api");
                     spls_status.setText("Checking Update...");
@@ -589,299 +584,332 @@ public class FSplash extends AppCompatActivity implements UpdateHelper.onUpdateC
         requestQueue.add(stringRequest);
     }
 
+//    private void download_cabang() {
+//        new Handler(Looper.getMainLooper()).post(new Runnable() {
+//             @Override
+//             public void run() {
+//                 spls_status.setText("Downloading branch data...");
+//             }
+//         });
+//        Cursor cr = db.rawQuery("SELECT * FROM tbl_api_path WHERE `name`='cabang'",null);
+//        cr.moveToFirst();
+//        String jsonurl = ApiOnline+cr.getString(1);
+//        Log.v("API-GET_CABANG",jsonurl);
+//        StringRequest stringRequest = new StringRequest(Request.Method.GET, jsonurl,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+////                        Log.v("GET_CABANG Response",response);
+//                        try {
+//                            JSONObject jsonObject = new JSONObject(response);
+//                            int status = jsonObject.getInt("status");
+//                            if (status==200) {
+//                                db.execSQL("delete from tbl_cabang");
+//                                JSONArray jsonArray = jsonObject.getJSONArray("data");
+//                                for (int position = 0; position < jsonArray.length(); position++) {
+//                                    JSONObject row = jsonArray.getJSONObject(position);
+//                                    String kode = row.getString("kode");
+//                                    String nama = row.getString("nama");
+//                                    String alamat = row.getString("alamat");
+//                                    String telepon = row.getString("telepon");
+//                                    String foto_cabang = row.getString("foto_cabang");
+//                                    String SQLiteDataBaseQueryHolder = "INSERT INTO tbl_cabang (kode,nama,alamat,latlong,telepon,foto_cabang) VALUES('"+kode+"','"+nama+"','"+alamat+"','-','"+telepon+"','"+foto_cabang+"');";
+//                                    db.execSQL(SQLiteDataBaseQueryHolder);
+//                                }
+//                                if (progressDialog.isShowing()) progressDialog.dismiss();
+//                                final Handler handler = new Handler();
+//                                handler.postDelayed(new Runnable() {
+//                                    @Override
+//                                    public void run() {
+//                                        download_items();
+//                                    }
+//                                }, 1000);
+//                            } else {
+//                                if (progressDialog.isShowing()) progressDialog.dismiss();
+//                                AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
+//                                builder.setTitle("Application error");
+//                                builder.setCancelable(false);
+//                                builder.setMessage("Respond Server error (GetCabang Result 400), Mohon kontak developer...");
+//                                builder.setPositiveButton("Tutup aplikasi", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        dialog.cancel();
+//                                        System.exit(0);
+//                                    }
+//                                });
+//                                builder.show();
+//                            }
+//                        } catch (JSONException e) {
+//                            Log.v("C",e.getMessage());
+//                            if (progressDialog.isShowing()) progressDialog.dismiss();
+//                            AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
+//                            builder.setTitle("Application error");
+//                            builder.setCancelable(false);
+//                            builder.setMessage("Data Server error, Mohon kontak developer...");
+//                            builder.setPositiveButton("Tutup aplikasi", new DialogInterface.OnClickListener() {
+//                                @Override
+//                                public void onClick(DialogInterface dialog, int which) {
+//                                    dialog.cancel();
+//                                    System.exit(0);
+//                                }
+//                            });
+//                            builder.show();
+//                        }
+//                    }
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        if (progressDialog.isShowing()) progressDialog.dismiss();
+//                        String message = "Something wrong, please contact developer"; // error message, show it in toast or dialog, whatever you want
+//                        if (error instanceof NetworkError || error instanceof AuthFailureError || error instanceof NoConnectionError || error instanceof TimeoutError) {
+//                            message = "Cannot connect to Internet";
+//                        } else if (error instanceof ServerError) {
+//                            message = "The server could not be found. Please try again later";
+//                        }  else if (error instanceof ParseError) {
+//                            message = "Parsing error! Please try again later";
+//                        }
+//                        Log.v("Err",message);
+//                        AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
+//                        builder.setTitle("Connection problem");
+//                        builder.setCancelable(false);
+//                        builder.setMessage("Koneksi server bermasalah, Mohon hubungi IT kemudian refresh kembali");
+//                        builder.setNeutralButton("Refresh", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                Cursor cursor = db.rawQuery("SELECT * FROM tbl_api", null);
+//                                cursor.moveToFirst();
+//                                if (cursor.getCount()>0) {
+//                                    ApiLocal=cursor.getString(2);
+//                                    ApiOnline=cursor.getString(1);
+//                                }
+//                                download_cabang();
+//                            }
+//                        });
+//                        builder.setNegativeButton("Keluar", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.cancel();
+//                                System.exit(0);
+//                            }
+//                        });
+//                        builder.show();
+//                    }
+//                })
+//        {
+//
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> headers = new HashMap<String, String>();
+//                headers.put("API_KEY", "53713");
+//                return headers;
+//            }
+//
+//            @Override
+//            public Response<String> parseNetworkResponse(NetworkResponse response) {
+//                String statusCode = String.valueOf(response.statusCode);
+//                return super.parseNetworkResponse(response);
+//            }
+//        };
+//        RequestQueue requestQueue = Volley.newRequestQueue(FSplash.this);
+//        stringRequest.setRetryPolicy(new DefaultRetryPolicy(0,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//        requestQueue.add(stringRequest);
+//    }
+
     private void download_cabang() {
-//        progressDialog.setTitle("Preparing First Run");
-//        progressDialog.setMessage("Mengunduh data cabang, please wait...");
-//        progressDialog.setCancelable(false);
-//        progressDialog.show();
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-             @Override
-             public void run() {
-                 spls_status.setText("Downloading branch data...");
-             }
-         });
-        Cursor cr = db.rawQuery("SELECT * FROM tbl_api_path WHERE `name`='cabang'",null);
-        cr.moveToFirst();
-        String jsonurl = ApiOnline+cr.getString(1);
-        Log.v("API-GET_CABANG",jsonurl);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, jsonurl,
-                new Response.Listener<String>() {
+        myRef.child("db_url").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> taskx) {
+                urldatabase=String.valueOf(taskx.getResult().getValue());
+                new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
-                    public void onResponse(String response) {
-//                        Log.v("GET_CABANG Response",response);
-                        try {
-                            JSONObject jsonObject = new JSONObject(response);
-                            int status = jsonObject.getInt("status");
-                            if (status==200) {
-                                db.execSQL("delete from tbl_cabang");
-                                JSONArray jsonArray = jsonObject.getJSONArray("data");
-                                for (int position = 0; position < jsonArray.length(); position++) {
-                                    JSONObject row = jsonArray.getJSONObject(position);
-                                    String kode = row.getString("kode");
-                                    String nama = row.getString("nama");
-                                    String alamat = row.getString("alamat");
-                                    String telepon = row.getString("telepon");
-                                    String foto_cabang = row.getString("foto_cabang");
-                                    String SQLiteDataBaseQueryHolder = "INSERT INTO tbl_cabang (kode,nama,alamat,latlong,telepon,foto_cabang) VALUES('"+kode+"','"+nama+"','"+alamat+"','-','"+telepon+"','"+foto_cabang+"');";
-                                    db.execSQL(SQLiteDataBaseQueryHolder);
-                                }
-                                if (progressDialog.isShowing()) progressDialog.dismiss();
-                                final Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        download_items();
-                                    }
-                                }, 1000);
-                            } else {
-                                if (progressDialog.isShowing()) progressDialog.dismiss();
-                                AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
-                                builder.setTitle("Application error");
-                                builder.setCancelable(false);
-                                builder.setMessage("Respond Server error (GetCabang Result 400), Mohon kontak developer...");
-                                builder.setPositiveButton("Tutup aplikasi", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        dialog.cancel();
-                                        System.exit(0);
-                                    }
-                                });
-                                builder.show();
-                            }
-                        } catch (JSONException e) {
-                            Log.v("C",e.getMessage());
-                            if (progressDialog.isShowing()) progressDialog.dismiss();
-                            AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
-                            builder.setTitle("Application error");
-                            builder.setCancelable(false);
-                            builder.setMessage("Data Server error, Mohon kontak developer...");
-                            builder.setPositiveButton("Tutup aplikasi", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    dialog.cancel();
-                                    System.exit(0);
-                                }
-                            });
-                            builder.show();
-                        }
+                    public void run() {
+                        spls_status.setText("Downloading Barcode...");
+                        new DownloadDB().execute(urldatabase);
                     }
-                },
-                new Response.ErrorListener() {
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
+                builder.setTitle("Cloud Not Responding");
+                builder.setCancelable(false);
+                builder.setMessage("Cloud Offline...");
+                builder.setPositiveButton("Tutup aplikasi", new DialogInterface.OnClickListener() {
                     @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (progressDialog.isShowing()) progressDialog.dismiss();
-                        String message = "Something wrong, please contact developer"; // error message, show it in toast or dialog, whatever you want
-                        if (error instanceof NetworkError || error instanceof AuthFailureError || error instanceof NoConnectionError || error instanceof TimeoutError) {
-                            message = "Cannot connect to Internet";
-                        } else if (error instanceof ServerError) {
-                            message = "The server could not be found. Please try again later";
-                        }  else if (error instanceof ParseError) {
-                            message = "Parsing error! Please try again later";
-                        }
-                        Log.v("Err",message);
-                        AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
-                        builder.setTitle("Connection problem");
-                        builder.setCancelable(false);
-                        builder.setMessage("Koneksi server bermasalah, Mohon hubungi IT kemudian refresh kembali");
-                        builder.setNeutralButton("Refresh", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Cursor cursor = db.rawQuery("SELECT * FROM tbl_api", null);
-                                cursor.moveToFirst();
-                                if (cursor.getCount()>0) {
-                                    ApiLocal=cursor.getString(2);
-                                    ApiOnline=cursor.getString(1);
-                                }
-                                download_cabang();
-                            }
-                        });
-                        builder.setNegativeButton("Keluar", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                                System.exit(0);
-                            }
-                        });
-                        builder.show();
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                        System.exit(0);
                     }
-                })
-        {
-
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<String, String>();
-                headers.put("API_KEY", "53713");
-                return headers;
-            }
-
-            @Override
-            public Response<String> parseNetworkResponse(NetworkResponse response) {
-                String statusCode = String.valueOf(response.statusCode);
-                return super.parseNetworkResponse(response);
-            }
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(FSplash.this);
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(0,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        requestQueue.add(stringRequest);
-    }
-
-    private void download_items() {
-//        progressDialog = new ProgressDialog(FSplash.this);
-//        progressDialog.setTitle("Preparing First Run");
-//        progressDialog.setMessage("Mengunduh data barang, ini memakan waktu beberapa menit, please wait...");
-//        progressDialog.setCancelable(false);
-//        progressDialog.show();
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                spls_status.setText("Downloading barcode data...");
+                });
+                builder.show();
             }
         });
-        Cursor cr = db.rawQuery("SELECT * FROM tbl_api_path WHERE `name`='item'",null);
-        cr.moveToFirst();
-        String jsonurl = ApiOnline+cr.getString(1);
-        Log.v("API-GET_BARANG",jsonurl);
-        StringRequest stringRequest = new StringRequest(Request.Method.GET, jsonurl,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    try {
-                                        JSONObject jsonObject = new JSONObject(response);
-                                        int status = jsonObject.getInt("status");
-                                        if (status == 200) {
-                                            JSONArray jsonArray = jsonObject.getJSONArray("data");
-                                            for (int position = 0; position < jsonArray.length(); position++) {
-                                                JSONObject row = jsonArray.getJSONObject(position);
-                                                String kdbrg = row.getString("kode_barang");
-                                                String nmbrg = row.getString("nama_barang");
-                                                String harga_beli = row.getString("harga_beli");
-                                                String harga_jual = row.getString("harga_jual");
-                                                String SQLiteDataBaseQueryHolder = "INSERT INTO tbl_barang (`kode_barang`,`nama_barang`,`harga_beli`,`harga_jual`) VALUES('" + kdbrg + "','" + nmbrg + "','"+harga_beli+"','"+harga_jual+"');";
-                                                db.execSQL(SQLiteDataBaseQueryHolder);
-                                            }
-                                            if (progressDialog.isShowing()) progressDialog.dismiss();
-                                            Gettoken();
-                                        } else {
-                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                                @Override
-                                                public void run() {
-                                                    if (progressDialog.isShowing()) progressDialog.dismiss();
-                                                    AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
-                                                    builder.setTitle("Application error");
-                                                    builder.setCancelable(false);
-                                                    builder.setMessage("Respond Server error (GetCabang Result 400), Mohon kontak developer...");
-                                                    builder.setPositiveButton("Tutup aplikasi", new DialogInterface.OnClickListener() {
-                                                        @Override
-                                                        public void onClick(DialogInterface dialog, int which) {
-                                                            db.execSQL("delete from tbl_barang");
-                                                            dialog.cancel();
-                                                            System.exit(0);
-                                                        }
-                                                    });
-                                                    builder.show();
-                                                }
-                                            });
-                                        }
-                                    } catch (JSONException e) {
-                                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                                            @Override
-                                            public void run() {
-                                                if (progressDialog.isShowing()) progressDialog.dismiss();
-                                                Log.v("JsonObject",e.getMessage());
-                                                AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
-                                                builder.setTitle("Application error");
-                                                builder.setCancelable(false);
-                                                builder.setMessage("Data Server error, Mohon kontak developer...");
-                                                builder.setPositiveButton("Tutup aplikasi", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialog, int which) {
-                                                        db.execSQL("delete from tbl_barang");
-                                                        dialog.cancel();
-                                                        System.exit(0);
-                                                    }
-                                                });
-                                                builder.show();
-                                            }
-                                        });
-                                    }
-                                }
-                            }).start();
-                    }
-
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        if (progressDialog.isShowing()) progressDialog.dismiss();
-                        String message = ""; // error message, show it in toast or dialog, whatever you want
-                        if (error instanceof NetworkError || error instanceof AuthFailureError || error instanceof NoConnectionError || error instanceof TimeoutError) {
-                            message = "Cannot connect to Internet";
-                        } else if (error instanceof ServerError) {
-                            message = "The server could not be found. Please try again later";
-                        }  else if (error instanceof ParseError) {
-                            message = "Parsing error! Please try again later";
-                        }
-                        Log.v("Err",message);
-                        new Handler(Looper.getMainLooper()).post(new Runnable() {
-                            @Override
-                            public void run() {
-                                AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
-                                builder.setTitle("Connection problem");
-                                builder.setCancelable(false);
-                                builder.setMessage("Koneksi server bermasalah, Mohon hubungi IT kemudian refresh kembali");
-                                builder.setNeutralButton("Refresh", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        Cursor cursor = db.rawQuery("SELECT * FROM tbl_api", null);
-                                        cursor.moveToFirst();
-                                        if (cursor.getCount()>0) {
-                                            ApiLocal=cursor.getString(2);
-                                            ApiOnline=cursor.getString(1);
-                                        }
-                                        db.execSQL("delete from tbl_barang");
-                                        download_items();
-                                    }
-                                });
-                                builder.setNegativeButton("Keluar", new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialog, int which) {
-                                        db.execSQL("delete from tbl_barang");
-                                        dialog.cancel();
-                                        System.exit(0);
-                                    }
-                                });
-                                builder.show();
-                            }
-                        });
-                    }
-                })
-        {
-            @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
-                Map<String, String> headers = new HashMap<String, String>();
-                headers.put("API_KEY", "53713");
-                return headers;
-            }
-
-            @Override
-            public Response<String> parseNetworkResponse(NetworkResponse response) {
-                String statusCode = String.valueOf(response.statusCode);
-                return super.parseNetworkResponse(response);
-            }
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(FSplash.this);
-//        request.setRetryPolicy(new DefaultRetryPolicy(0,
-//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        stringRequest.setRetryPolicy(new DefaultRetryPolicy(0,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-//        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
-//                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        requestQueue.add(stringRequest);
     }
+
+//    private void download_items() {
+//        new Handler(Looper.getMainLooper()).post(new Runnable() {
+//            @Override
+//            public void run() {
+//                spls_status.setText("Downloading Barcode...");
+//                new DownloadBarangCSV().execute("https://firebasestorage.googleapis.com/v0/b/stockapp-4abf1.appspot.com/o/csv_barang%2Fv_barang.csv?alt=media&token=87b46d62-dc9c-4f01-992a-d9c099fd0381");
+//            }
+//        });
+//    }
+
+//    private void download_items() {
+//        new Handler(Looper.getMainLooper()).post(new Runnable() {
+//            @Override
+//            public void run() {
+//                spls_status.setText("Downloading barcode data...");
+//            }
+//        });
+//        Cursor cr = db.rawQuery("SELECT * FROM tbl_api_path WHERE `name`='item'",null);
+//        cr.moveToFirst();
+//        String jsonurl = ApiOnline+cr.getString(1);
+//        Log.v("API-GET_BARANG",jsonurl);
+//        StringRequest stringRequest = new StringRequest(Request.Method.GET, jsonurl,
+//                new Response.Listener<String>() {
+//                    @Override
+//                    public void onResponse(String response) {
+//                            new Thread(new Runnable() {
+//                                @Override
+//                                public void run() {
+//                                    try {
+//                                        JSONObject jsonObject = new JSONObject(response);
+//                                        int status = jsonObject.getInt("status");
+//                                        if (status == 200) {
+//                                            JSONArray jsonArray = jsonObject.getJSONArray("data");
+//                                            for (int position = 0; position < jsonArray.length(); position++) {
+//                                                JSONObject row = jsonArray.getJSONObject(position);
+//                                                String kdbrg = row.getString("kode_barang");
+//                                                String nmbrg = row.getString("nama_barang");
+//                                                String harga_beli = row.getString("harga_beli");
+//                                                String harga_jual = row.getString("harga_jual");
+//                                                String SQLiteDataBaseQueryHolder = "INSERT INTO tbl_barang (`kode_barang`,`nama_barang`,`harga_beli`,`harga_jual`) VALUES('" + kdbrg + "','" + nmbrg + "','"+harga_beli+"','"+harga_jual+"');";
+//                                                db.execSQL(SQLiteDataBaseQueryHolder);
+//                                            }
+//                                            if (progressDialog.isShowing()) progressDialog.dismiss();
+//                                            Gettoken();
+//                                        } else {
+//                                            new Handler(Looper.getMainLooper()).post(new Runnable() {
+//                                                @Override
+//                                                public void run() {
+//                                                    if (progressDialog.isShowing()) progressDialog.dismiss();
+//                                                    AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
+//                                                    builder.setTitle("Application error");
+//                                                    builder.setCancelable(false);
+//                                                    builder.setMessage("Respond Server error (GetCabang Result 400), Mohon kontak developer...");
+//                                                    builder.setPositiveButton("Tutup aplikasi", new DialogInterface.OnClickListener() {
+//                                                        @Override
+//                                                        public void onClick(DialogInterface dialog, int which) {
+//                                                            db.execSQL("delete from tbl_barang");
+//                                                            dialog.cancel();
+//                                                            System.exit(0);
+//                                                        }
+//                                                    });
+//                                                    builder.show();
+//                                                }
+//                                            });
+//                                        }
+//                                    } catch (JSONException e) {
+//                                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+//                                            @Override
+//                                            public void run() {
+//                                                if (progressDialog.isShowing()) progressDialog.dismiss();
+//                                                Log.v("JsonObject",e.getMessage());
+//                                                AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
+//                                                builder.setTitle("Application error");
+//                                                builder.setCancelable(false);
+//                                                builder.setMessage("Data Server error, Mohon kontak developer...");
+//                                                builder.setPositiveButton("Tutup aplikasi", new DialogInterface.OnClickListener() {
+//                                                    @Override
+//                                                    public void onClick(DialogInterface dialog, int which) {
+//                                                        db.execSQL("delete from tbl_barang");
+//                                                        dialog.cancel();
+//                                                        System.exit(0);
+//                                                    }
+//                                                });
+//                                                builder.show();
+//                                            }
+//                                        });
+//                                    }
+//                                }
+//                            }).start();
+//                    }
+//
+//                },
+//                new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        if (progressDialog.isShowing()) progressDialog.dismiss();
+//                        String message = ""; // error message, show it in toast or dialog, whatever you want
+//                        if (error instanceof NetworkError || error instanceof AuthFailureError || error instanceof NoConnectionError || error instanceof TimeoutError) {
+//                            message = "Cannot connect to Internet";
+//                        } else if (error instanceof ServerError) {
+//                            message = "The server could not be found. Please try again later";
+//                        }  else if (error instanceof ParseError) {
+//                            message = "Parsing error! Please try again later";
+//                        }
+//                        Log.v("Err",message);
+//                        new Handler(Looper.getMainLooper()).post(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                AlertDialog.Builder builder = new AlertDialog.Builder(FSplash.this);
+//                                builder.setTitle("Connection problem");
+//                                builder.setCancelable(false);
+//                                builder.setMessage("Koneksi server bermasalah, Mohon hubungi IT kemudian refresh kembali");
+//                                builder.setNeutralButton("Refresh", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        Cursor cursor = db.rawQuery("SELECT * FROM tbl_api", null);
+//                                        cursor.moveToFirst();
+//                                        if (cursor.getCount()>0) {
+//                                            ApiLocal=cursor.getString(2);
+//                                            ApiOnline=cursor.getString(1);
+//                                        }
+//                                        db.execSQL("delete from tbl_barang");
+//                                        download_items();
+//                                    }
+//                                });
+//                                builder.setNegativeButton("Keluar", new DialogInterface.OnClickListener() {
+//                                    @Override
+//                                    public void onClick(DialogInterface dialog, int which) {
+//                                        db.execSQL("delete from tbl_barang");
+//                                        dialog.cancel();
+//                                        System.exit(0);
+//                                    }
+//                                });
+//                                builder.show();
+//                            }
+//                        });
+//                    }
+//                })
+//        {
+//            @Override
+//            public Map<String, String> getHeaders() throws AuthFailureError {
+//                Map<String, String> headers = new HashMap<String, String>();
+//                headers.put("API_KEY", "53713");
+//                return headers;
+//            }
+//
+//            @Override
+//            public Response<String> parseNetworkResponse(NetworkResponse response) {
+//                String statusCode = String.valueOf(response.statusCode);
+//                return super.parseNetworkResponse(response);
+//            }
+//        };
+//        RequestQueue requestQueue = Volley.newRequestQueue(FSplash.this);
+////        request.setRetryPolicy(new DefaultRetryPolicy(0,
+////                DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//        stringRequest.setRetryPolicy(new DefaultRetryPolicy(0,
+//                DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+////        stringRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+////                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+//        requestQueue.add(stringRequest);
+//    }
 
     @Override
     public void onUpdateCheckListener(String url) {
@@ -1049,5 +1077,215 @@ public class FSplash extends AppCompatActivity implements UpdateHelper.onUpdateC
                 }
             }
         }
+    }
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case progress_bar_type: // we set this to 0
+                pDialog = new ProgressDialog(this);
+                pDialog.setMessage("Downloading file. Please wait...");
+                pDialog.setIndeterminate(false);
+                pDialog.setMax(100);
+                pDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+                pDialog.setCancelable(false);
+                pDialog.show();
+                return pDialog;
+            default:
+                return null;
+        }
+    }
+
+    private class DownloadDB extends AsyncTask<String, String, String> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            showDialog(progress_bar_type);
+        }
+        @Override
+        protected String doInBackground(String... f_url) {
+            int count;
+            try {
+                URL url = new URL(f_url[0]);
+                URLConnection connection = url.openConnection();
+                connection.connect();
+                int lenghtOfFile = connection.getContentLength();
+                InputStream input = new BufferedInputStream(url.openStream(),
+                        8192);
+                OutputStream output = new FileOutputStream(Environment.
+                        getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/stockapp.db" );
+
+                byte data[] = new byte[1024];
+
+                long total = 0;
+
+                while ((count = input.read(data)) != -1) {
+                    total += count;
+                    publishProgress("" + (int) ((total * 100) / lenghtOfFile));
+                    output.write(data, 0, count);
+                }
+                output.flush();
+                output.close();
+                input.close();
+
+            } catch (Exception e) {
+                Log.e("Error: ", e.getMessage());
+            }
+            return null;
+        }
+
+        protected void onProgressUpdate(String... progress) {
+            // setting progress percentage
+            pDialog.setProgress(Integer.parseInt(progress[0]));
+        }
+
+        @Override
+        protected void onPostExecute(String file_url) {
+            // dismiss the dialog after the file was downloaded
+            dismissDialog(progress_bar_type);
+            spls_status.setText("Fetching Barcode. Please wait...");
+            dbonline=SQLiteDatabase.openDatabase(Environment.
+                            getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/stockapp.db", null,
+                    SQLiteDatabase.OPEN_READWRITE);
+
+            dbonline.execSQL("DELETE FROM tbl_counting");
+            dbonline.execSQL("DELETE FROM tbl_counting_detail");
+            dbonline.execSQL("DELETE FROM tbl_distin");
+            dbonline.execSQL("DELETE FROM tbl_distin_detail");
+            dbonline.execSQL("DELETE FROM tbl_api");
+            dbonline.execSQL("DELETE FROM tbl_user");
+            dbonline.execSQL("DELETE FROM tbl_api_path");
+
+            Cursor cr1 = db.rawQuery("SELECT `no_doc`,`kode_cabang`,`petugas`,`id_user`,`lokasi_rak`,`tanggal` FROM tbl_counting",null);
+            for (int count = 0; count < cr1.getCount(); count++) {
+                cr1.moveToPosition(count);
+                dbonline.execSQL("INSERT INTO tbl_counting (`no_doc`,`kode_cabang`,`petugas`,`id_user`,`lokasi_rak`,`tanggal`) VALUES" +
+                        "('"+cr1.getString(0)+"','"+cr1.getString(1)+"','"+cr1.getString(2)+"','"+cr1.getString(3)+"','"+cr1.getString(4)+"','"+cr1.getString(5)+"');");
+            }
+
+            Cursor cr2 = db.rawQuery("SELECT `id`,`no_doc`,`kode_barang`,`qty` FROM tbl_counting_detail",null);
+            for (int count = 0; count < cr2.getCount(); count++) {
+                cr2.moveToPosition(count);
+                dbonline.execSQL("INSERT INTO tbl_counting_detail (`id`,`no_doc`,`kode_barang`,`qty`) VALUES" +
+                        "('"+cr2.getString(0)+"','"+cr2.getString(1)+"','"+cr2.getString(2)+"','"+cr2.getString(3)+"');");
+            }
+
+            Cursor cr3 = db.rawQuery("SELECT `No_bukti`,`Kode_Penerima`,`Kode_Pengirim`,`nama_penerima`,`nama_pengirim`,`Kode_departemen`,`Total_qty`,`Total_qty_receive`,`Total_beli`,`Total_jual`,`nama_penghitung`,`id_user`,`Kode_user`,`keterangan`,`tgl_kirim`,`tanggal_masuk`,`tanggal_buat`,`No_SuratJalan`,`no_pol`,`expedisi` FROM tbl_distin",null);
+            for (int count = 0; count < cr3.getCount(); count++) {
+                cr3.moveToPosition(count);
+                dbonline.execSQL("INSERT INTO tbl_distin (`No_bukti`,`Kode_Penerima`,`Kode_Pengirim`,`nama_penerima`,`nama_pengirim`,`Kode_departemen`,`Total_qty`,`Total_qty_receive`,`Total_beli`,`Total_jual`,`nama_penghitung`,`id_user`,`Kode_user`,`keterangan`,`tgl_kirim`,`tanggal_masuk`,`tanggal_buat`,`No_SuratJalan`,`no_pol`,`expedisi`) VALUES" +
+                        "('"+cr3.getString(0)+"','"+cr3.getString(1)+"','"+cr3.getString(2)+"','"+cr3.getString(3)+"','"+cr3.getString(4)+"','"+cr3.getString(5)+"','"+cr3.getString(6)+"','"+cr3.getString(7)+"','"+cr3.getString(8)+"','"+cr3.getString(9)+"','"+cr3.getString(10)+"','"+cr3.getString(11)+"','"+cr3.getString(12)+"','"+cr3.getString(13)+"','"+cr3.getString(14)+"','"+cr3.getString(15)+"','"+cr3.getString(16)+"','"+cr3.getString(17)+"',,'"+cr3.getString(18)+"','"+cr3.getString(19)+"');");
+            }
+
+            Cursor cr4 = db.rawQuery("SELECT `id`,`No_bukti`,`Kode_Penerima`,`nama_penerima`,`Kode_Pengirim`,`nama_pengirim`,`Kode_barang`,`Qty`,`Qty_receive`,`harga_beli`,`harga_jual` FROM tbl_distin_detail",null);
+            for (int count = 0; count < cr4.getCount(); count++) {
+                cr4.moveToPosition(count);
+                dbonline.execSQL("INSERT INTO tbl_distin_detail (`id`,`No_bukti`,`Kode_Penerima`,`nama_penerima`,`Kode_Pengirim`,`nama_pengirim`,`Kode_barang`,`Qty`,`Qty_receive`,`harga_beli`,`harga_jual`) VALUES" +
+                        "('"+cr4.getString(0)+"','"+cr4.getString(1)+"','"+cr4.getString(2)+"','"+cr4.getString(3)+"','"+cr4.getString(4)+"','"+cr4.getString(5)+"','"+cr4.getString(6)+"','"+cr4.getString(7)+"','"+cr4.getString(8)+"','"+cr4.getString(9)+"','"+cr4.getString(10)+"');");
+            }
+
+            Cursor cr5 = db.rawQuery("SELECT `id`,`api_online`,`api_offline` FROM tbl_api",null);
+            for (int count = 0; count < cr5.getCount(); count++) {
+                cr5.moveToPosition(count);
+                dbonline.execSQL("INSERT INTO tbl_api (`id`,`api_online`,`api_offline`) VALUES" +
+                        "('"+cr5.getString(0)+"','"+cr5.getString(1)+"','"+cr5.getString(2)+"');");
+            }
+
+            Cursor cr6 = db.rawQuery("SELECT `id`, `username`, `password`, `email`, `alias`, `kode_cabang` FROM tbl_user",null);
+            for (int count = 0; count < cr6.getCount(); count++) {
+                cr6.moveToPosition(count);
+                dbonline.execSQL("INSERT INTO tbl_user (`id`, `username`, `password`, `email`, `alias`, `kode_cabang`) VALUES" +
+                        "('"+cr6.getString(0)+"','"+cr6.getString(1)+"','"+cr6.getString(2)+"','"+cr6.getString(3)+"','"+cr6.getString(4)+"','"+cr6.getString(5)+"');");
+            }
+
+            Cursor cr7 = db.rawQuery("SELECT `name`, `path` FROM tbl_api_path",null);
+            for (int count = 0; count < cr7.getCount(); count++) {
+                cr7.moveToPosition(count);
+                dbonline.execSQL("INSERT INTO tbl_api_path (`name`, `path`) VALUES" +
+                        "('"+cr7.getString(0)+"','"+cr7.getString(1)+"');");
+            }
+
+            try {
+                importDatabase(Environment.
+                        getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/stockapp.db");
+                Log.v("Success","Replace Done");
+                Gettoken();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Log.v("ErrMoving",e.getMessage());
+            }
+//            final Handler handler = new Handler();
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                    FileReader file = null;
+//                    try {
+//                        file = new FileReader(Environment.
+//                                getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)+"/barang.csv");
+//                        BufferedReader buffer = new BufferedReader(file);
+//                        db.execSQL("DELETE FROM tbl_barang");
+//                        String line = "";
+//                        String tableName ="tbl_barang";
+//                        String columns = "kode_barang, nama_barang, harga_beli, harga_jual";
+//                        String str1 = "INSERT INTO " + tableName + " (" + columns + ") values (";
+//                        String str2 = ");";
+//                        db.beginTransaction();
+//                        while (true) {
+//                            try {
+//                                if (!((line = buffer.readLine()) != null)) break;
+//                                StringBuilder sb = new StringBuilder(str1);
+//                                String[] str = line.split(",");
+//                                sb.append("'" + str[0].replaceAll("\"", "") + "','");
+//                                sb.append(str[1].replaceAll("\"", "") + "','");
+//                                sb.append(str[2].replaceAll("\"", "") + "','");
+//                                sb.append(str[3].replaceAll("\"", "") + "'");
+//                                sb.append(str2);
+//                                db.execSQL(sb.toString());
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
+//                                Log.v("Error Read CSV",e.getMessage());
+//                            }
+//                        }
+//
+//                        db.setTransactionSuccessful();
+//                        db.endTransaction();
+//                        Process p=null;
+//                        try {
+//                            p = new ProcessBuilder()
+//                                    .command("PathToYourScript")
+//                                    .start();
+//                        } catch (IOException e) {
+//                            e.printStackTrace();
+//                        } finally {
+//                            if(p!=null) p.destroy();
+//                        }
+//                        Gettoken();
+////                        handler.removeCallbacks(this);
+//                    } catch (FileNotFoundException e) {
+//                        e.printStackTrace();
+//                        Log.v("File Not Found", e.getMessage());
+////                        Gettoken();
+////                        handler.removeCallbacks(this);
+//                    }
+//                }
+//            }, 1000);
+        }
+
+    }
+    private void importDatabase(String inputFileName) throws IOException
+    {
+        InputStream mInput = new FileInputStream(inputFileName);
+        String outFileName = "data/data/com.urban.stockapp/databases/stockapp.db";
+        OutputStream mOutput = new FileOutputStream(outFileName);
+        byte[] mBuffer = new byte[1024];
+        int mLength;
+        while ((mLength = mInput.read(mBuffer))>0)
+        {
+            mOutput.write(mBuffer, 0, mLength);
+        }
+        mOutput.flush();
+        mOutput.close();
+        mInput.close();
     }
 }

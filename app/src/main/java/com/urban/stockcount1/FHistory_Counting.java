@@ -159,7 +159,7 @@ public class FHistory_Counting extends AppCompatActivity {
                 enamascan.setText(alias_user);
 
                 eidscan.setText("CT-" + kodecb + idrandom);
-                ecabang.setEnabled(false);
+                ecabang.setEnabled(true);
                 etglscan.setText(getCurrentTime());
                 bottomSheetView.findViewById(R.id.bnewscan).setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -171,15 +171,21 @@ public class FHistory_Counting extends AppCompatActivity {
                         else
                         {
                             bottomSheetDialog.dismiss();
-                            db.execSQL("INSERT INTO tbl_counting (no_doc,kode_cabang,petugas,id_user,lokasi_rak,tanggal) VALUES " +
-                                    "('"+eidscan.getText().toString()+"','"+kodecb+"','"+enamascan.getText().toString()+"','"+id_user+"','"+elokasiscan.getText().toString()+"','"+etglscan.getText().toString()+"')");
-                            Intent Formku = new Intent(FHistory_Counting.this, FCounting_Stock.class);
-                            Formku.putExtra("id",eidscan.getText().toString());
-                            Formku.putExtra("tanggal",etglscan.getText().toString());
-                            Formku.putExtra("cabang",ecabang.getText().toString());
-                            FCounting_Stock.setState(0);
-                            startActivity(Formku);
-                            finish();
+                            Cursor cursorc=db.rawQuery("SELECT  * FROM tbl_cabang where '['||`kode`||'] '||`nama` = '"+ecabang.getText().toString()+"'",null);
+                            if (cursorc.getCount()>=1) {
+                                cursorc.moveToFirst();
+                                db.execSQL("INSERT INTO tbl_counting (no_doc,kode_cabang,petugas,id_user,lokasi_rak,tanggal) VALUES " +
+                                        "('"+eidscan.getText().toString()+"','"+cursorc.getString(0)+"','"+enamascan.getText().toString()+"','"+id_user+"','"+elokasiscan.getText().toString()+"','"+etglscan.getText().toString()+"')");
+                                Intent Formku = new Intent(FHistory_Counting.this, FCounting_Stock.class);
+                                Formku.putExtra("id",eidscan.getText().toString());
+                                Formku.putExtra("tanggal",etglscan.getText().toString());
+                                Formku.putExtra("cabang",ecabang.getText().toString());
+                                FCounting_Stock.setState(0);
+                                startActivity(Formku);
+                                finish();
+                            } else {
+                                ShowMessage(FHistory_Counting.this,"Cabang belum ada yang terpilih","Pemberitahuan");
+                            }
                         }
                     }
                 });
@@ -210,7 +216,8 @@ public class FHistory_Counting extends AppCompatActivity {
 //                });
 
                 //
-                Cursor cr = db.rawQuery("select * from tbl_cabang where `kode`='"+kodecb+"'",null);
+//                Cursor cr = db.rawQuery("select * from tbl_cabang where `kode`='"+kodecb+"'",null);
+                Cursor cr = db.rawQuery("select * from tbl_cabang",null);
                 if (cr.getCount()>=1) {
                     List<String> labels= getAllLabels();
                     ecabang.setText(selectedindexcabang);
@@ -258,7 +265,8 @@ public class FHistory_Counting extends AppCompatActivity {
     //SetDataToSpiner
     public List<String> getAllLabels(){
         List<String>labels= new ArrayList<>();
-        Cursor cursor=db.rawQuery("SELECT  * FROM tbl_cabang where `kode`='"+kodecb+"'",null);
+//        Cursor cursor=db.rawQuery("SELECT  * FROM tbl_cabang where `kode`='"+kodecb+"'",null);
+        Cursor cursor=db.rawQuery("SELECT  * FROM tbl_cabang",null);
         cursor.moveToFirst();
         selectedindexcabang="["+cursor.getString(0)+"] "+cursor.getString(1);
         for (int count = 0; count < cursor.getCount(); count++) {
@@ -274,7 +282,8 @@ public class FHistory_Counting extends AppCompatActivity {
         ArrayList<String> tglnya = new ArrayList<>();
         ArrayList<String> petugas = new ArrayList<>();
         ArrayList<String> rak = new ArrayList<>();
-        Cursor cursor = db.rawQuery("select `ct`.`no_doc`,'['||`ct`.`kode_cabang`||'] '||`cb`.`nama` as `cabang`,`ct`.`tanggal`,`ct`.`petugas`,`ct`.`lokasi_rak` from tbl_counting as `ct` left join `tbl_cabang` as `cb` on `cb`.`kode`=`ct`.`kode_cabang` where `ct`.`kode_cabang`='"+kodecb+"'", null);
+//        Cursor cursor = db.rawQuery("select `ct`.`no_doc`,'['||`ct`.`kode_cabang`||'] '||`cb`.`nama` as `cabang`,`ct`.`tanggal`,`ct`.`petugas`,`ct`.`lokasi_rak` from tbl_counting as `ct` left join `tbl_cabang` as `cb` on `cb`.`kode`=`ct`.`kode_cabang` where `ct`.`kode_cabang`='"+kodecb+"'", null);
+        Cursor cursor = db.rawQuery("select `ct`.`no_doc`,'['||`ct`.`kode_cabang`||'] '||`cb`.`nama` as `cabang`,`ct`.`tanggal`,`ct`.`petugas`,`ct`.`lokasi_rak` from tbl_counting as `ct` left join `tbl_cabang` as `cb` on `cb`.`kode`=`ct`.`kode_cabang`", null);
         if (cursor.getCount()>0) {
             history_noata_anim.setVisibility(View.GONE);
         } else {
